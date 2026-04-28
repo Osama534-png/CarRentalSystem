@@ -1,0 +1,293 @@
+﻿@model WebApplication6.Models.ViewModels.HomeIndexVm
+@{
+    ViewData["Title"] = "Anasayfa";
+
+    string DtLocal(DateTime dt) => dt.ToString("yyyy-MM-ddTHH:mm");
+    var startLocal = DtLocal(Model.Baslangic);
+    var endLocal = DtLocal(Model.Bitis);
+}
+
+<style>
+    :root {
+        --red: #D4002A;
+        --bordeaux: #800000;
+        --panel: rgba(0,0,0,.62);
+        --panel2: rgba(0,0,0,.45);
+        --text: #fff;
+        --muted: rgba(255,255,255,.75);
+        --radius: 18px;
+    }
+
+    /* Sayfa üst hero */
+    .home-hero {
+        position: relative;
+        min-height: 78vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 16px;
+        overflow: hidden;
+        /* ✅ BURAYI kendi görsel yolunla değiştir */
+        background-image: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.55)), url('/images/home-hero.jpg');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .home-inner {
+        width: min(1100px, 100%);
+        text-align: center;
+        color: var(--text);
+    }
+
+    .home-title {
+        font-size: clamp(22px, 3.2vw, 42px);
+        font-weight: 900;
+        margin: 0 0 18px 0;
+        text-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+
+    .home-sub {
+        margin: 0 0 22px 0;
+        color: var(--muted);
+        font-weight: 600;
+        text-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+
+    /* Arama paneli (eski kutu) */
+    .search-panel {
+        margin: 0 auto;
+        width: min(980px, 100%);
+        background: var(--panel);
+        border-radius: var(--radius);
+        border: 1px solid rgba(255,255,255,.12);
+        box-shadow: 0 18px 45px rgba(0,0,0,.35);
+        overflow: hidden;
+        text-align: left;
+    }
+
+    .panel-topbar {
+        height: 4px;
+        background: var(--red);
+    }
+
+    .panel-body {
+        padding: 18px 18px 16px 18px;
+        display: grid;
+        grid-template-columns: 1.1fr .9fr;
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .left-col {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        border-right: 1px solid rgba(255,255,255,.10);
+        padding-right: 16px;
+    }
+
+    .row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .step {
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: var(--red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        color: #fff;
+        flex: 0 0 28px;
+    }
+
+    .block {
+        flex: 1;
+        background: var(--panel2);
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 14px;
+        padding: 10px 12px;
+    }
+
+    .block-label {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .4px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,.70);
+        margin-bottom: 6px;
+    }
+
+    .control {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        color: #fff;
+        outline: none;
+        font-weight: 700;
+    }
+
+        .control option {
+            color: #111;
+        }
+
+    .right-col {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-left: 8px;
+    }
+
+    .dt-grid {
+        display: grid;
+        grid-template-columns: 1fr 120px;
+        gap: 10px;
+    }
+
+    .btn-wrap {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: auto;
+    }
+
+    .btn-cta {
+        background: var(--red);
+        color: #fff;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        font-weight: 900;
+        letter-spacing: .3px;
+        cursor: pointer;
+        min-width: 180px;
+        box-shadow: 0 10px 22px rgba(212,0,42,.22);
+    }
+
+        .btn-cta:hover {
+            filter: brightness(.96);
+        }
+
+    /* Responsive */
+    @@media (max-width: 900px) {
+        .panel-body {
+            grid-template-columns: 1fr;
+        }
+
+        .left-col {
+            border-right: 0;
+            padding-right: 0;
+        }
+
+        .right-col {
+            padding-left: 0;
+        }
+
+        .dt-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .btn-wrap {
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="home-hero">
+    <div class="home-inner">
+        <h1 class="home-title">Ayrıcalıklı bir araç kiralama deneyimi<br />OMA Rent A Car ile sizinle.</h1>
+
+        <div class="search-panel">
+            <div class="panel-topbar"></div>
+
+            <form asp-controller="Fleet" asp-action="Index" method="get" id="homeSearchForm">
+                <div class="panel-body">
+
+                    <div class="left-col">
+                        <div class="row">
+                            <div class="step">1</div>
+                            <div class="block">
+                                <div class="block-label">Teslim Alma Ofisi</div>
+                                <select class="control" name="alisSubeId">
+                                    <option value="">Alış Ofisi Seçiniz</option>
+                                    @foreach (var s in Model.Subeler)
+                                    {
+                                        <option value="@s.Value" selected="@(Model.AlisSubeId?.ToString() == s.Value)">@s.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="step">2</div>
+                            <div class="block">
+                                <div class="block-label">İade Etme Ofisi</div>
+                                <select class="control" name="iadeSubeId">
+                                    <option value="">İade Ofisi (Farklıysa)</option>
+                                    @foreach (var s in Model.Subeler)
+                                    {
+                                        <option value="@s.Value" selected="@(Model.IadeSubeId?.ToString() == s.Value)">@s.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="right-col">
+                        <div class="block">
+                            <div class="block-label">Alış Tarihi</div>
+                            <div class="dt-grid">
+                                <input class="control" type="date" id="startDate" />
+                                <input class="control" type="time" id="startTime" value="09:00" />
+                            </div>
+                        </div>
+
+                        <div class="block">
+                            <div class="block-label">İade Tarihi</div>
+                            <div class="dt-grid">
+                                <input class="control" type="date" id="endDate" />
+                                <input class="control" type="time" id="endTime" value="09:00" />
+                            </div>
+                        </div>
+
+                        <!-- FleetController şu an baslangic/bitis (string) bekliyor -->
+                        <input type="hidden" name="baslangic" id="baslangicHidden" value="@startLocal" />
+                        <input type="hidden" name="bitis" id="bitisHidden" value="@endLocal" />
+
+                        <div class="btn-wrap">
+                            <button type="submit" class="btn-cta">HEMEN KİRALA</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Model'den gelen datetime-local'ı (yyyy-MM-ddTHH:mm) date/time inputlarına dağıt
+    function splitDT(val) {
+        if (!val || val.length < 16) return null;
+        return { d: val.substring(0, 10), t: val.substring(11, 16) };
+    }
+
+    const start = splitDT(document.getElementById('baslangicHidden').value);
+    const end = splitDT(document.getElementById('bitisHidden').value);
+
+    if (start) { document.getElementById('startDate').value = start.d; document.getElementById('startTime').value = start.t; }
+    if (end)   { document.getElementById('endDate').value   = end.d;   document.getElementById('endTime').value   = end.t; }
+
+    document.getElementById('homeSearchForm').addEventListener('submit', function () {
+        const sd = document.getElementById('startDate').value;
+        const st = document.getElementById('startTime').value || '09:00';
+        const ed = document.getElementById('endDate').value;
+        const et = document.getElementById('endTime').value || '09:00';
+
+        if (sd) document.getElementById('baslangicHidden').value = sd + 'T' + st;
+        if (ed) document.getElementById('bitisHidden').value = ed + 'T' + et;
+    });
+</script>

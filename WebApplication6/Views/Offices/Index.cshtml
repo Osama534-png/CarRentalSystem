@@ -1,0 +1,293 @@
+﻿@{
+    ViewData["Title"] = "Ofislerimiz";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<section class="map-section">
+    <h2 class="section-title">Hizmet Noktalarımız</h2>
+    <p class="section-subtitle">Türkiye'nin 15 seçkin noktasında, OMA kalitesiyle yanınızdayız.</p>
+
+    <div class="map-container">
+        <img src="~/images/TRHarita.png" alt="Türkiye Haritası" class="turkey-map-img">
+
+        <div class="car-marker loc-artvin" data-city="Artvin Merkez"><i class="fa-solid fa-car-side"></i></div>
+        <div class="car-marker loc-istanbul" data-city="İstanbul Sabiha Gökçen"><i class="fa-solid fa-plane"></i></div>
+        <div class="car-marker loc-istanbul-new" data-city="İstanbul Havalimanı"><i class="fa-solid fa-plane"></i></div>
+        <div class="car-marker loc-ankara" data-city="Ankara Esenboğa"><i class="fa-solid fa-car-side"></i></div>
+        <div class="car-marker loc-mugla" data-city="Muğla Bodrum"><i class="fa-solid fa-umbrella-beach"></i></div>
+        <div class="car-marker loc-kastamonu" data-city="Kastamonu Havalimanı"><i class="fa-solid fa-tree"></i></div>
+        <div class="car-marker loc-izmir" data-city="İzmir A. Menderes"><i class="fa-solid fa-sun"></i></div>
+        <div class="car-marker loc-antalya" data-city="Antalya Havalimanı"><i class="fa-solid fa-water"></i></div>
+        <div class="car-marker loc-trabzon" data-city="Trabzon Havalimanı"><i class="fa-solid fa-anchor"></i></div>
+        <div class="car-marker loc-bursa" data-city="Bursa Yenişehir"><i class="fa-solid fa-industry"></i></div>
+        <div class="car-marker loc-adana" data-city="Adana Şakirpaşa"><i class="fa-solid fa-pepper-hot"></i></div>
+        <div class="car-marker loc-gaziantep" data-city="Gaziantep Havalimanı"><i class="fa-solid fa-utensils"></i></div>
+        <div class="car-marker loc-kayseri" data-city="Kayseri Erkilet"><i class="fa-solid fa-mountain"></i></div>
+        <div class="car-marker loc-samsun" data-city="Samsun Çarşamba"><i class="fa-solid fa-ship"></i></div>
+        <div class="car-marker loc-diyarbakir" data-city="Diyarbakır Havalimanı"><i class="fa-solid fa-landmark"></i></div>
+    </div>
+</section>
+
+<section class="offices-list">
+
+    <div class="office-card">
+        <i class="fa-solid fa-mountain-sun city-icon"></i>
+        <h3>Artvin Merkez</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Çarşı Mah. Cumhuriyet Cad.<br>Merkez / ARTVİN</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0466 212 00 00</span></div>
+        <a class="btn-call" href="tel:+904662120000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-plane-departure city-icon"></i>
+        <h3>İstanbul S. Gökçen</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Sabiha Gökçen Havalimanı<br>Pendik / İSTANBUL</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0216 588 00 00</span></div>
+        <a class="btn-call" href="tel:+902165880000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-plane city-icon"></i>
+        <h3>İstanbul Havalimanı</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>İstanbul Havalimanı<br>Arnavutköy / İSTANBUL</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0212 444 00 00</span></div>
+        <a class="btn-call" href="tel:+902124440000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-building-columns city-icon"></i>
+        <h3>Ankara Esenboğa</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Esenboğa Havalimanı<br>Akyurt / ANKARA</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0312 398 00 00</span></div>
+        <a class="btn-call" href="tel:+903123980000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-umbrella-beach city-icon"></i>
+        <h3>Muğla Bodrum</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Milas-Bodrum Havalimanı<br>Milas / MUĞLA</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0252 523 00 00</span></div>
+        <a class="btn-call" href="tel:+902525230000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-tree city-icon"></i>
+        <h3>Kastamonu Havalimanı</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Kastamonu Havalimanı Yolu<br>Merkez / KASTAMONU</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0366 214 00 00</span></div>
+        <a class="btn-call" href="tel:+903662140000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-sun city-icon"></i>
+        <h3>İzmir A. Menderes</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Adnan Menderes Havalimanı<br>Gaziemir / İZMİR</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0232 274 00 00</span></div>
+        <a class="btn-call" href="tel:+902322740000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-water city-icon"></i>
+        <h3>Antalya Havalimanı</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Antalya Havalimanı<br>Muratpaşa / ANTALYA</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0242 330 00 00</span></div>
+        <a class="btn-call" href="tel:+902423300000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-anchor city-icon"></i>
+        <h3>Trabzon Havalimanı</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Trabzon Havalimanı<br>Ortahisar / TRABZON</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0462 328 00 00</span></div>
+        <a class="btn-call" href="tel:+904623280000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-industry city-icon"></i>
+        <h3>Bursa Yenişehir</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Yenişehir Havalimanı<br>Yenişehir / BURSA</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0224 773 00 00</span></div>
+        <a class="btn-call" href="tel:+902247730000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-pepper-hot city-icon"></i>
+        <h3>Adana Şakirpaşa</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Şakirpaşa Havalimanı<br>Seyhan / ADANA</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0322 435 00 00</span></div>
+        <a class="btn-call" href="tel:+903224350000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-utensils city-icon"></i>
+        <h3>Gaziantep Havalimanı</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Gaziantep Havalimanı<br>Oğuzeli / GAZİANTEP</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0342 582 00 00</span></div>
+        <a class="btn-call" href="tel:+903425820000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-mountain city-icon"></i>
+        <h3>Kayseri Erkilet</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Erkilet Havalimanı<br>Kocasinan / KAYSERİ</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0352 338 00 00</span></div>
+        <a class="btn-call" href="tel:+903523380000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-ship city-icon"></i>
+        <h3>Samsun Çarşamba</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Çarşamba Havalimanı<br>Çarşamba / SAMSUN</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0362 844 00 00</span></div>
+        <a class="btn-call" href="tel:+903628440000">Ara</a>
+    </div>
+
+    <div class="office-card">
+        <i class="fa-solid fa-landmark city-icon"></i>
+        <h3>Diyarbakır Havalimanı</h3>
+        <div class="office-detail"><i class="fa-solid fa-location-dot"></i><span>Diyarbakır Havalimanı<br>Bağlar / DİYARBAKIR</span></div>
+        <div class="office-detail"><i class="fa-solid fa-phone"></i><span>0412 233 00 00</span></div>
+        <a class="btn-call" href="tel:+904122330000">Ara</a>
+    </div>
+
+</section>
+
+<style>
+    :root {
+        --primary-bordeaux: #800000;
+        --primary-red: #D4002A;
+        --light-bg: #f9f9f9;
+        --text-dark: #333;
+    }
+
+    body { background-color: var(--light-bg); }
+
+    .map-section { padding: 40px 5%; text-align: center; background-color: white; border-bottom: 1px solid #ddd; }
+    .section-title { font-size: 32px; color: var(--primary-bordeaux); margin-bottom: 10px; font-weight: 900; }
+    .section-subtitle { color: #666; margin-bottom: 40px; }
+
+    .map-container {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        background-color: #eef;
+    }
+
+    .turkey-map-img { width: 100%; display: block; opacity: 0.95; }
+
+    .car-marker {
+        position: absolute;
+        background-color: var(--primary-red);
+        color: white;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        box-shadow: 0 0 0 2px rgba(212, 0, 42, 0.3);
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+        animation: bounce 2s infinite;
+        z-index: 10;
+    }
+
+    .car-marker::after {
+        content: attr(data-city);
+        position: absolute;
+        bottom: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: bold;
+        white-space: nowrap;
+        opacity: 0;
+        transition: 0.3s;
+        pointer-events: none;
+        z-index: 20;
+    }
+
+    .car-marker:hover::after { opacity: 1; bottom: 40px; }
+    .car-marker:hover {
+        background-color: var(--primary-bordeaux);
+        transform: translate(-50%, -50%) scale(1.2);
+        z-index: 30;
+    }
+
+    /* Marker konumları */
+    .loc-artvin { top: 15%; left: 85%; }
+    .loc-istanbul { top: 18%; left: 23%; }
+    .loc-istanbul-new { top: 14%; left: 20%; }
+    .loc-ankara { top: 35%; left: 38%; }
+    .loc-mugla { top: 75%; left: 18%; }
+    .loc-kastamonu { top: 15%; left: 42%; }
+    .loc-izmir { top: 52%; left: 10%; }
+    .loc-antalya { top: 82%; left: 32%; }
+    .loc-trabzon { top: 16%; left: 75%; }
+    .loc-bursa { top: 25%; left: 18%; }
+    .loc-adana { top: 68%; left: 54%; }
+    .loc-gaziantep { top: 68%; left: 62%; }
+    .loc-kayseri { top: 45%; left: 52%; }
+    .loc-samsun { top: 12%; left: 55%; }
+    .loc-diyarbakir { top: 55%; left: 78%; }
+
+    @@keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translate(-50%, -50%) translateY(0); }
+        40% { transform: translate(-50%, -50%) translateY(-10px); }
+        60% { transform: translate(-50%, -50%) translateY(-5px); }
+    }
+
+    .offices-list {
+        padding: 60px 10%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .office-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: 0.3s;
+        border-top: 3px solid var(--primary-red);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .office-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    .office-card i.city-icon { font-size: 32px; color: #eee; position: absolute; top: 15px; right: 15px; }
+
+    .office-card h3 { color: var(--primary-bordeaux); font-size: 18px; margin-bottom: 12px; font-weight: 800; }
+    .office-detail { display: flex; align-items: flex-start; margin-bottom: 10px; color: #555; font-size: 13px; line-height: 1.4; }
+    .office-detail i { color: var(--primary-red); margin-right: 8px; margin-top: 2px; width: 16px; font-size: 12px; }
+
+    .btn-call {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 18px;
+        background-color: var(--primary-bordeaux);
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .btn-call:hover { background-color: var(--primary-red); }
+
+    @@media (max-width: 768px) {
+        .offices-list { padding: 28px 16px; }
+    }
+</style>

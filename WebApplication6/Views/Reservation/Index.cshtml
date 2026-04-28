@@ -1,0 +1,154 @@
+﻿@model List<WebApplication6.Models.ViewModels.ReservationListItemVm>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+         .resv-wrap { m
+    ax-width: 1100px; margin: 28px auto; padding: 0 14px; }
+     .resv-head { display:flex; align-items:end; justify-content:space-between; gap:12px; margin-bottom:14px; }
+
+     .resv-title { font-size: 28px; font-weight: 800; margin: 0; }
+     .resv-sub { color:#6b7280; margin: 4px 0 0 0; font-size: 14px; }
+
+         .resv-gri
+    d { display:gri
+    d; grid-template-co
+    lumns: repeat(2, minmax(0, 1fr)); gap:16px; margin-top:16px; }
+    @@media (max-width: 900px){ .resv-grid { grid-template-columns: 1fr; } }
+
+
+     .resv-card {
+         background: #fff;
+              border: 1px solid rgba(0,0,0,.08);
+         border-radius: 16px;
+
+         overflow: hidden;
+         box-shadow: 0 8px 22px rgba(0,0,0,.08);
+         transition: transform .12s ease, box-shadow .12s ease;
+         }
+     .resv-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,.12); }
+
+
+     .resv-card-body { display:flex; gap:14px; padding: 14px; }
+     .resv-img {
+             wi dth: 180px; height: 120px;
+         border-radius: 12px;
+
+         object-fit: cover;
+         background: #f3f4f6;
+         flex: 0 0 auto;
+         border: 1px solid rgba(0,0,0,.06);
+     }
+    @@media (max-width: 520px){
+         .resv-card-body{ flex-direction: column; }
+         .resv-img{ width: 100%; height: 180px; }
+     }
+
+     .resv-main { flex: 1; min-width: 0; }
+     .resv-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+     .resv-car { font-weight: 800; font-size: 18px; margin: 0; line-height: 1.2; }
+     .resv-plate { color:#6b7280; font-size: 13px; margin-top: 3px; }
+
+     .resv-badge {
+         font-size: 12px;
+         font-weight: 700;
+         padding: 6px 10px;
+         border-radius: 999px;
+         white-space: nowrap;
+         border: 1px solid transparent;
+     }
+     .resv-badge.ok { background: rgba(34,197,94,.12); color:#15803d; border-color: rgba(34,197,94,.25); }
+     .resv-badge.warn { background: rgba(245,158,11,.14); color:#92400e; border-color: rgba(245,158,11,.28); }
+     .resv-badge.bad { background: rgba(239,68,68,.12); color:#b91c1c; border-color: rgba(239,68,68,.25); }
+
+     .resv-meta { margin-top: 10px; font-size: 13px; color:#111827; }
+     .resv-row { display:flex; justify-content:space-between; gap:12px; padding: 6px 0; border-top: 1px dashed rgba(0,0,0,.10); }
+     .resv-row:first-child { border-top: 0; padding-top: 0; }
+     .resv-label { color:#6b7280; font-weight: 600; }
+     .resv-val { font-weight: 700; }
+
+     .resv-actions { display:flex; gap:10px; margin-top: 12px; }
+     .btn-soft {
+         border-radius: 999px;
+         padding: 8px 12px;
+         font-weight: 700;
+     }
+     .btn-outline-dark.btn-soft:hover { color:#fff; }
+     .btn-danger.btn-soft { padding: 10px 14px; }
+
+     .empty-card {
+         background: #fff;
+         border: 1px dashed rgba(0,0,0,.18);
+         border-radius: 16px;
+         padding: 18px;
+         box-shadow: 0 8px 22px rgba(0,0,0,.06);
+     }
+</style>
+
+<div class="resv-wrap">
+    <div class="resv-head">
+        <div>
+            <h2 class="resv-title">Rezervasyonlarım</h2>
+            <p class="resv-sub">Oluşturduğun rezervasyonları burada görebilirsin.</p>
+        </div>
+        <a class="btn btn-danger btn-soft" asp-controller="Fleet" asp-action="Index">Yeni Rezervasyon</a>
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="empty-card">
+            <div style="font-weight:800; font-size:16px;">Şu an herhangi bir rezervasyonunuz yok.</div>
+            <div class="text-muted" style="margin-top:6px;">Araç filosuna gidip yeni rezervasyon oluşturabilirsiniz.</div>
+        </div>
+    }
+    else
+    {
+        <div class="resv-grid">
+            @foreach (var r in Model)
+            {
+                var durum = (r.Durum ?? "").Trim().ToLower();
+                var badgeClass =
+                durum.Contains("iptal") ? "bad" :
+                (durum.Contains("bekle") || durum.Contains("onay")) ? "warn" :
+                "ok";
+
+                <div class="resv-card">
+                    <div class="resv-card-body">
+                        <img class="resv-img"
+                             src="@(string.IsNullOrWhiteSpace(r.ResimUrl) ? "/img/cars/default.jpg" : r.ResimUrl)"
+                             alt="Araç" />
+
+                        <div class="resv-main">
+                            <div class="resv-top">
+                                <div style="min-width:0;">
+                                    <p class="resv-car">@r.AracMarka @r.AracModel</p>
+                                    <div class="resv-plate">@r.Plaka</div>
+                                </div>
+                                <span class="resv-badge @badgeClass">@r.Durum</span>
+                            </div>
+
+                            <div class="resv-meta">
+                                <div class="resv-row">
+                                    <div class="resv-label">Başlangıç</div>
+                                    <div class="resv-val">@r.Baslangic.ToString("dd.MM.yyyy HH:mm")</div>
+                                </div>
+                                <div class="resv-row">
+                                    <div class="resv-label">Bitiş</div>
+                                    <div class="resv-val">@r.Bitis.ToString("dd.MM.yyyy HH:mm")</div>
+                                </div>
+                            </div>
+
+                            <div class="resv-actions">
+                                <a class="btn btn-outline-dark btn-soft"
+                                   asp-controller="Reservation"
+                                   asp-action="Success"
+                                   asp-route-id="@r.RezervasyonID">
+                                    Detay
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

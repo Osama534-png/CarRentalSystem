@@ -1,0 +1,476 @@
+﻿@model WebApplication6.Models.ViewModels.RegisterVm
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Üye Ol";
+    var ok = TempData["Success"] as string;
+    var err = TempData["Error"] as string;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üye Ol | OMA Rent A Car</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    @* Bootstrap modal için (layout kullanmadığın için burada ekliyoruz) *@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap');
+
+        :root {
+            --primary-bordeaux: #800000;
+            --primary-red: #D4002A;
+            --light-bg: #f4f4f4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto',sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-bordeaux);
+            color: #fff;
+            padding: 0 5%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            background: #fff;
+            padding: 5px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+            .logo img {
+                height: 45px;
+            }
+
+        .back-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #fff;
+            width: 950px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+        }
+
+        .visual {
+            flex: 1;
+            background: linear-gradient(rgba(128,0,0,0.7),rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1511910849309-0dffb87838d5?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+            .visual h2 {
+                font-size: 34px;
+                font-weight: 900;
+                margin-bottom: 12px;
+            }
+
+        .form {
+            flex: 1;
+            padding: 40px 45px;
+        }
+
+        .ok {
+            background: #e7fff0;
+            color: #0b6b2a;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .error {
+            background: #ffe5e8;
+            color: #8a0018;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .field-val {
+            margin-top: 6px;
+            font-size: 12px;
+        }
+
+        .row2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .input {
+            position: relative;
+        }
+
+            .input input {
+                width: 100%;
+                padding: 14px 14px 14px 42px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 15px;
+                outline: none;
+            }
+
+            .input i {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #999;
+            }
+
+        .btn-main {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg,var(--primary-bordeaux),var(--primary-red));
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            .btn-main:disabled {
+                opacity: .55;
+                cursor: not-allowed;
+            }
+
+        .agree-wrap {
+            margin-top: 12px;
+        }
+
+        .agree {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 13px;
+            color: #222;
+        }
+
+            .agree input {
+                margin-top: 3px;
+                width: 16px;
+                height: 16px;
+            }
+
+        .agree-link {
+            color: #800000;
+            font-weight: 800;
+            text-decoration: underline;
+        }
+
+            .agree-link:hover {
+                color: #D4002A;
+            }
+
+        @@media (max-width: 900px) {
+            .card {
+                width: 100%;
+                max-width: 520px;
+                flex-direction: column;
+            }
+
+            .visual {
+                display: none;
+            }
+
+            .form {
+                padding: 30px 20px;
+            }
+
+            .row2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="@Url.Action("Index","Home")"><img src="~/images/OMA1.png" alt="OMA Logo"></a>
+        </div>
+        <a href="@Url.Action("Index","Home")" class="back-link"><i class="fa-solid fa-arrow-left"></i> Anasayfaya Dön</a>
+    </header>
+
+    <div class="wrap">
+        <div class="card">
+            <div class="visual">
+                <h2>Aramıza Katılın!</h2>
+                <p>Üye olun, size özel ayrıcalıkların keyfini çıkarın.</p>
+            </div>
+
+            <div class="form">
+                <h1 style="color:#800000; font-weight:900; margin-bottom:8px;">Hesap Oluştur</h1>
+                <div style="color:#666; font-size:14px; margin-bottom:16px;">Bilgilerinizi girerek hemen üye olabilirsiniz.</div>
+
+                @if (!string.IsNullOrWhiteSpace(ok))
+                {
+                    <div class="ok">@ok</div>
+                }
+                @if (!string.IsNullOrWhiteSpace(err))
+                {
+                    <div class="error">@err</div>
+                }
+
+                <form method="post" asp-action="Register" asp-controller="Account" id="registerForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+                    <div asp-validation-summary="ModelOnly" class="error"></div>
+
+                    <div class="row2">
+                        <div class="group">
+                            <label>Ad</label>
+                            <div class="input">
+                                <i class="fa-regular fa-user"></i>
+                                <input asp-for="Ad" placeholder="Adınız" autocomplete="given-name" />
+                            </div>
+                            <span asp-validation-for="Ad" class="text-danger field-val"></span>
+                        </div>
+
+                        <div class="group">
+                            <label>Soyad</label>
+                            <div class="input">
+                                <i class="fa-regular fa-user"></i>
+                                <input asp-for="Soyad" placeholder="Soyadınız" autocomplete="family-name" />
+                            </div>
+                            <span asp-validation-for="Soyad" class="text-danger field-val"></span>
+                        </div>
+                    </div>
+
+                    <div class="group">
+                        <label>E-Posta</label>
+                        <div class="input">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input asp-for="Email" type="email" placeholder="ornek@email.com" autocomplete="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger field-val"></span>
+                    </div>
+
+                    <div class="row2">
+                        <div class="group">
+                            <label>Şifre</label>
+                            <div class="input">
+                                <i class="fa-solid fa-lock"></i>
+                                <input asp-for="Sifre" type="password" placeholder="••••••••" autocomplete="new-password" />
+                            </div>
+                            <span asp-validation-for="Sifre" class="text-danger field-val"></span>
+                        </div>
+
+                        <div class="group">
+                            <label>Şifre Tekrar</label>
+                            <div class="input">
+                                <i class="fa-solid fa-lock"></i>
+                                <input asp-for="SifreTekrar" type="password" placeholder="••••••••" autocomplete="new-password" />
+                            </div>
+                            <span asp-validation-for="SifreTekrar" class="text-danger field-val"></span>
+                        </div>
+                    </div>
+
+                    @* ✅ Hidden alanlar POST'a gitsin *@
+                    <input type="hidden" asp-for="TermsAccepted" id="TermsAccepted" />
+                    <input type="hidden" asp-for="KvkkAccepted" id="KvkkAccepted" />
+
+                    <div class="agree-wrap">
+                        <label class="agree">
+                            <input id="agreeChk" type="checkbox" disabled />
+                            <span>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" class="agree-link">Üyelik Sözleşmesi</a>
+                                ve
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#kvkkModal" class="agree-link">KVKK Metni</a>
+                                okudum, onaylıyorum.
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-main" id="btnReg" disabled>
+                        Üye Ol <i class="fa-solid fa-user-plus"></i>
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Üyelik ve Araç Kiralama Sözleşmesi -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content" style="border-radius:14px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Üyelik ve Araç Kiralama Sözleşmesi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body" style="font-size:13px; line-height:1.55;">
+                    <h6 style="font-weight:900;">1. Taraflar</h6>
+                    <p>İşbu sözleşme, OMA Rent A Car (Kiraya Veren) ile siteye üye olan kullanıcı (Üye) arasında akdedilmiştir.</p>
+
+                    <h6 style="font-weight:900;">2. Üyelik Şartları ve Sorumluluklar</h6>
+                    <p>Üye, kayıt formunda verdiği bilgilerin doğruluğunu taahhüt eder. Yanlış bilgi verilmesi durumunda oluşacak zararlardan Üye sorumludur.</p>
+
+                    <h6 style="font-weight:900;">3. Kiralama Koşulları</h6>
+                    <p>Ehliyet ve yaş koşulları ile depozito/ödeme şartları araç sınıfına göre değişebilir. Araçlar ticari amaçla kullanılamaz.</p>
+
+                    <h6 style="font-weight:900;">4. Trafik Cezaları ve OGS/HGS</h6>
+                    <p>Kiralama süresince oluşan trafik cezaları ve otoyol geçiş ücretleri Üye’ye aittir.</p>
+
+                    <h6 style="font-weight:900;">5. İptal ve İade</h6>
+                    <p>Rezervasyonlar, şirket politikalarına göre iptal edilebilir. İptal koşulları rezervasyon anında görüntülenir.</p>
+
+                    <h6 style="font-weight:900;">6. Yürürlük</h6>
+                    <p>Üye, kayıt işlemini tamamladığında işbu sözleşmeyi kabul etmiş sayılır.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+                    <button id="btnTermsAccept" type="button" class="btn btn-danger" data-bs-dismiss="modal">Sözleşmeyi Kabul Ediyorum</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KVKK Aydınlatma Metni -->
+    <div class="modal fade" id="kvkkModal" tabindex="-1" aria-labelledby="kvkkModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content" style="border-radius:14px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="kvkkModalLabel">Kişisel Verilerin Korunması Kanunu (KVKK) Aydınlatma Metni</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+
+                <div class="modal-body" style="font-size:13px; line-height:1.55;">
+                    <p>Veri sorumlusu: OMA Rent A Car</p>
+
+                    <h6 style="font-weight:900;">1. İşlenen Kişisel Verileriniz</h6>
+                    <p>Kimlik, iletişim ve işlem güvenliği bilgileriniz; üyelik ve kiralama süreçlerinin yürütülmesi amacıyla işlenebilir.</p>
+
+                    <h6 style="font-weight:900;">2. İşleme Amaçları</h6>
+                    <p>Rezervasyon/kiralama süreçlerinin yürütülmesi, iletişim faaliyetleri, yasal yükümlülüklerin yerine getirilmesi.</p>
+
+                    <h6 style="font-weight:900;">3. Aktarım</h6>
+                    <p>Kanunen yetkili kurum ve kuruluşlara, zorunlu hallerde aktarım yapılabilir.</p>
+
+                    <h6 style="font-weight:900;">4. Haklarınız</h6>
+                    <p>KVKK’nın 11. maddesi kapsamındaki haklarınızı kullanabilirsiniz.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Kapat</button>
+                    <button id="btnKvkkAccept" type="button" class="btn btn-danger" data-bs-dismiss="modal">Okudum, Anladım</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const btnReg = document.getElementById('btnReg');
+        const chk = document.getElementById('agreeChk');
+        const termsInput = document.getElementById('TermsAccepted');
+        const kvkkInput = document.getElementById('KvkkAccepted');
+
+        let termsOk = false;
+        let kvkkOk = false;
+
+        function refreshUI() {
+            const bothOk = termsOk && kvkkOk;
+
+            chk.disabled = !bothOk;
+            chk.checked = bothOk;
+
+            // submit sadece ikisi de ok ise aktif
+            btnReg.disabled = !bothOk;
+
+            termsInput.value = termsOk ? "true" : "false";
+            kvkkInput.value = kvkkOk ? "true" : "false";
+        }
+
+        refreshUI();
+
+        document.getElementById('btnTermsAccept')?.addEventListener('click', () => {
+            termsOk = true;
+            refreshUI();
+        });
+
+        document.getElementById('btnKvkkAccept')?.addEventListener('click', () => {
+            kvkkOk = true;
+            refreshUI();
+        });
+
+        // Çift submit engeli
+        document.getElementById("registerForm")?.addEventListener("submit", function () {
+            if (btnReg.disabled) return;
+            btnReg.disabled = true;
+            btnReg.innerText = "Gönderiliyor...";
+        });
+    </script>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+</body>
+</html>

@@ -1,0 +1,462 @@
+﻿@model WebApplication6.Models.ViewModels.ReservationCreateVm
+@using WebApplication6.Models
+
+@{
+    ViewData["Title"] = "Rezervasyon";
+    var arac = ViewBag.Arac as Araclar;
+
+    string Img(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return Url.Content("~/images/cars/default.jpg");
+        url = url.Trim();
+        if (url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+            url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            return url;
+        if (url.StartsWith("/")) return url;
+        return Url.Content("~/images/cars/" + url);
+    }
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<div class="rez-create">
+    <div class="rez-container">
+
+        <aside class="rez-side">
+            <div class="rez-card rez-sidecard">
+                <div class="rez-side-title">Seçilen Araç</div>
+
+                <img class="rez-carimg" src="@Img(arac?.ResimUrl)" alt="@arac?.Marka @arac?.Model" />
+
+                <div class="rez-carname">@arac?.Marka @arac?.Model</div>
+
+                <div class="rez-pills">
+                    <span class="rez-pill">@arac?.Plaka</span>
+                    <span class="rez-pill">@arac?.Durum</span>
+                </div>
+
+                <div class="rez-kv">
+                    <div class="k">Başlangıç</div>
+                    <div class="v">@Model.Baslangic.ToString("dd.MM.yyyy HH:mm")</div>
+
+                    <div class="k">Bitiş</div>
+                    <div class="v">@Model.Bitis.ToString("dd.MM.yyyy HH:mm")</div>
+
+                    <div class="k">Alış Şube</div>
+                    <div class="v">@((string?)ViewBag.AlisSubeText ?? "-")</div>
+
+                    <div class="k">İade Şube</div>
+                    <div class="v">@((string?)ViewBag.IadeSubeText ?? "-")</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="rez-main">
+            <div class="rez-card">
+                <div class="rez-head">
+                    <h2><i class="fa-solid fa-user-check"></i> Sürücü Bilgileri</h2>
+                    <span class="rez-muted">Adli sicil doğrulaması zorunludur.</span>
+                </div>
+
+                <form asp-action="Create" method="post" class="rez-form" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="rez-valsum"></div>
+
+                    <input type="hidden" asp-for="AracId" />
+                    <input type="hidden" asp-for="AlisSubeId" />
+                    <input type="hidden" asp-for="IadeSubeId" />
+                    <input type="hidden" asp-for="Baslangic" />
+                    <input type="hidden" asp-for="Bitis" />
+
+                    <!-- PDF doğrulama sonucu -->
+                    <input type="hidden" asp-for="SicilDogrulandi" id="SicilDogrulandi" />
+                    <input type="hidden" asp-for="SicilBarkodNo" id="SicilBarkodNoHidden" />
+
+                    <div class="rez-grid2">
+                        <div class="rez-field">
+                            <label asp-for="Ad"></label>
+                            <input class="rez-input" asp-for="Ad" />
+                            <span asp-validation-for="Ad" class="rez-val"></span>
+                        </div>
+                        <div class="rez-field">
+                            <label asp-for="Soyad"></label>
+                            <input class="rez-input" asp-for="Soyad" />
+                            <span asp-validation-for="Soyad" class="rez-val"></span>
+                        </div>
+                    </div>
+
+                    <div class="rez-grid2">
+                        <div class="rez-field">
+                            <label asp-for="Tckn"></label>
+                            <input class="rez-input" asp-for="Tckn" maxlength="11" />
+                            <span asp-validation-for="Tckn" class="rez-val"></span>
+                        </div>
+                        <div class="rez-field">
+                            <label asp-for="DogumTarihi"></label>
+                            <input class="rez-input" asp-for="DogumTarihi" type="date" />
+                            <span asp-validation-for="DogumTarihi" class="rez-val"></span>
+                        </div>
+                    </div>
+
+                    <div class="rez-grid2">
+                        <div class="rez-field">
+                            <label asp-for="Telefon"></label>
+                            <input class="rez-input" asp-for="Telefon" />
+                            <span asp-validation-for="Telefon" class="rez-val"></span>
+                        </div>
+                        <div class="rez-field">
+                            <label asp-for="Email"></label>
+                            <input class="rez-input" asp-for="Email" type="email" />
+                            <span asp-validation-for="Email" class="rez-val"></span>
+                        </div>
+                    </div>
+
+                    <div class="rez-field">
+                        <label asp-for="EhliyetNo"></label>
+                        <input class="rez-input" asp-for="EhliyetNo" />
+                        <span asp-validation-for="EhliyetNo" class="rez-val"></span>
+                    </div>
+
+                    <!-- DB NOT NULL alanlar -->
+                    <div class="rez-grid2">
+                        <div class="rez-field">
+                            <label asp-for="EhliyetSinifi">Ehliyet Sınıfı</label>
+                            <input class="rez-input" asp-for="EhliyetSinifi" placeholder="B" />
+                            <span asp-validation-for="EhliyetSinifi" class="rez-val"></span>
+                        </div>
+                        <div class="rez-field">
+                            <label asp-for="Adres"></label>
+                            <input class="rez-input" asp-for="Adres" />
+                            <span asp-validation-for="Adres" class="rez-val"></span>
+                        </div>
+
+                    </div>
+
+                    <!-- Adli Sicil Doğrulama (UI sende vardı; backend doğrulama ayrı endpoint ile yapılacak) -->
+                    <div class="rez-card" style="padding:14px; border:1px solid #e5e7eb;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fa-solid fa-file-shield" style="font-size:18px; color:#800000;"></i>
+                            <div>
+                                <div style="font-weight:900;">Adli Sicil Doğrulama</div>
+                                <div style="font-size:12px; color:#6b7280;">E-Devlet’ten indirilen belge.pdf gereklidir.</div>
+                            </div>
+                            <div style="margin-left:auto; display:flex; gap:8px;">
+                                <button type="button" id="btnVerified" class="rez-btn" style="padding:8px 12px; border-color:rgba(22,163,74,.25); color:#15803d; display:none;">
+                                    Doğrulandı
+                                </button>
+                                <button type="button" id="btnClearVerify" class="rez-btn" style="padding:8px 12px;">
+                                    Kaldır
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px; display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                            <div class="rez-field">
+                                <label>14 Haneli Barkod No</label>
+                                <input class="rez-input" id="barkodNo" placeholder="ADB123..." />
+                            </div>
+                            <div class="rez-field">
+                                <label>Belge (PDF)</label>
+                                <input class="rez-input" id="pdfFile" type="file" accept="application/pdf" />
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px; display:flex; justify-content:flex-end;">
+                            <button type="button" id="btnVerify" class="rez-btn rez-primary" style="padding:10px 16px;">
+                                Doğrula <i class="fa-solid fa-check"></i>
+                            </button>
+                        </div>
+
+                        <div id="verifyMsg" class="rez-val" style="display:none;"></div>
+                    </div>
+
+                    <!-- ✅ Checkbox BINDING'i %100 garanti: hidden + checkbox MANUEL -->
+                    <div class="rez-check">
+                        <input type="hidden" name="SicilTemizOnay" value="false" />
+                        <input type="checkbox"
+                               id="SicilTemizOnay"
+                               name="SicilTemizOnay"
+                               value="true"
+                               @(Model.SicilTemizOnay ? "checked" : "") />
+                        <label for="SicilTemizOnay">
+                            Adli sicilim temiz ve kiralama şartlarını kabul ediyorum
+                        </label>
+                    </div>
+                    <span asp-validation-for="SicilTemizOnay" class="rez-val"></span>
+
+                    <div class="rez-actions">
+                        <a asp-controller="Fleet" asp-action="Index" class="rez-btn rez-ghost">
+                            <i class="fa-solid fa-chevron-left"></i> Araç Değiştir
+                        </a>
+
+                        <button type="submit" class="rez-btn rez-primary">
+                            Rezervasyonu Tamamla <i class="fa-solid fa-check"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+    </div>
+</div>
+
+<style>
+    .rez-create {
+        --bordeaux:#800000;
+        --red:#D4002A;
+        --bg:#f6f6f6;
+        --muted:#6b7280;
+        --border:#e5e7eb;
+        --shadow:0 18px 50px rgba(0,0,0,.12);
+        --radius:18px;
+
+        background: var(--bg);
+        padding: 22px 18px 60px;
+    }
+
+    .rez-container{
+        max-width:1100px;
+        margin: 0 auto;
+        display:grid;
+        grid-template-columns: 360px 1fr;
+        gap:18px;
+        align-items:start;
+    }
+
+    .rez-card{
+        background:#fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border:1px solid var(--border);
+        overflow:hidden;
+    }
+
+    .rez-sidecard{ padding:14px; }
+
+    .rez-side-title{
+        font-weight:900;
+        color: var(--bordeaux);
+        margin-bottom:10px;
+    }
+
+    .rez-carimg{
+        width:100%;
+        height:190px;
+        object-fit:cover;
+        border-radius:14px;
+        border:1px solid var(--border);
+        display:block;
+    }
+
+    .rez-carname{
+        font-weight:900;
+        font-size:16px;
+        margin-top:10px;
+    }
+
+    .rez-pills{
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+        margin-top:8px;
+    }
+
+    .rez-pill{
+        font-size:12px;
+        border:1px solid var(--border);
+        padding:4px 10px;
+        border-radius:999px;
+        color:#111;
+        background:#fff;
+    }
+
+    .rez-kv{
+        margin-top:12px;
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:10px;
+    }
+
+    .rez-kv .k{
+        font-size:12px;
+        color: var(--muted);
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.02em;
+    }
+
+    .rez-kv .v{
+        font-size:13px;
+        font-weight:800;
+        color:#111;
+    }
+
+    .rez-head{
+        padding:18px 18px 12px;
+        border-bottom:1px solid var(--border);
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-end;
+        gap:12px;
+    }
+
+    .rez-head h2{
+        margin:0;
+        font-size:18px;
+        display:flex;
+        gap:10px;
+        align-items:center;
+    }
+
+    .rez-muted{
+        color: var(--muted);
+        font-size:13px;
+    }
+
+    .rez-form{
+        padding:16px 18px 18px;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+    }
+
+    .rez-grid2{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:12px;
+    }
+
+    .rez-field label{
+        display:block;
+        font-size:12px;
+        font-weight:900;
+        margin-bottom:6px;
+        text-transform:uppercase;
+        letter-spacing:.02em;
+        color:#374151;
+    }
+
+    .rez-input{
+        width:100%;
+        padding:12px 12px;
+        border:1px solid var(--border);
+        border-radius:12px;
+        outline:none;
+        font-size:14px;
+        background:#fff;
+    }
+
+    .rez-input:focus{
+        border-color: rgba(212,0,42,.7);
+        box-shadow: 0 0 0 4px rgba(212,0,42,.12);
+    }
+
+    .rez-val{
+        color:#b91c1c;
+        font-size:12px;
+        margin-top:6px;
+        display:block;
+    }
+
+    .rez-valsum{
+        color:#b91c1c;
+        font-size:13px;
+    }
+
+    .rez-check{
+        display:flex;
+        gap:10px;
+        align-items:center;
+        padding:10px 12px;
+        border:1px dashed rgba(212,0,42,.35);
+        border-radius:12px;
+        background: rgba(212,0,42,.04);
+    }
+
+    .rez-check input[type="checkbox"]{
+        width:18px;
+        height:18px;
+    }
+
+    .rez-actions{
+        display:flex;
+        justify-content:space-between;
+        gap:12px;
+        margin-top:6px;
+    }
+
+    .rez-btn{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        padding:12px 16px;
+        border-radius:999px;
+        text-decoration:none;
+        font-weight:900;
+        cursor:pointer;
+        border:1px solid var(--border);
+        background:#fff;
+        color:#111;
+        white-space:nowrap;
+    }
+
+    .rez-primary{
+        border:none;
+        color:#fff;
+        background: linear-gradient(45deg, var(--bordeaux), var(--red));
+        box-shadow: 0 10px 26px rgba(128,0,0,.25);
+    }
+
+    .rez-primary:hover{ filter: brightness(1.05); }
+
+    .rez-ghost:hover{ border-color: rgba(212,0,42,.35); }
+
+    @@media (max-width: 960px){
+        .rez-container{ grid-template-columns: 1fr; }
+        .rez-grid2{ grid-template-columns: 1fr; }
+        .rez-actions{ flex-direction:column; }
+        .rez-btn{ width:100%; }
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // UI-only doğrulama: burada gerçek PDF text parse yok.
+        // İstersen bunu server endpoint'e bağlarız.
+        const btnVerify = document.getElementById("btnVerify");
+        const btnVerified = document.getElementById("btnVerified");
+        const btnClear = document.getElementById("btnClearVerify");
+        const msg = document.getElementById("verifyMsg");
+
+        function setVerified(ok, message) {
+            msg.style.display = message ? "block" : "none";
+            msg.textContent = message || "";
+
+            document.getElementById("SicilDogrulandi").value = ok ? "true" : "false";
+
+            btnVerified.style.display = ok ? "inline-flex" : "none";
+        }
+
+        btnVerify?.addEventListener("click", function () {
+            const barkod = document.getElementById("barkodNo").value.trim();
+            const file = document.getElementById("pdfFile").files[0];
+
+            if (!barkod) return setVerified(false, "Barkod no girin.");
+            if (!file) return setVerified(false, "PDF dosyası seçin.");
+
+            // Şimdilik: sadece doluysa doğrulanmış say (gerçek karşılaştırma istersen ayrıca endpoint yazarız)
+            document.getElementById("SicilBarkodNoHidden").value = barkod;
+            setVerified(true, "");
+        });
+
+        btnClear?.addEventListener("click", function () {
+            document.getElementById("barkodNo").value = "";
+            document.getElementById("pdfFile").value = "";
+            document.getElementById("SicilBarkodNoHidden").value = "";
+            setVerified(false, "");
+        });
+    </script>
+}

@@ -1,0 +1,302 @@
+﻿@{
+    ViewData["Title"] = "Kampanyalar";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<section class="campaign-hero">
+    <div class="hero-inner">
+        <h1>Fırsatları Kaçırmayın!</h1>
+        <p>OMA Rent A Car ayrıcalıklarından size özel indirimlerle yararlanın.</p>
+    </div>
+</section>
+
+<section class="check-section">
+    <h3>Size Uygun Kampanyayı Görün:</h3>
+    <input type="date" id="checkDate" class="date-picker">
+    <button type="button" class="btn-check" onclick="checkCampaignEligibility()">Sorgula</button>
+</section>
+
+<section class="campaign-container">
+    <div class="promo-card" id="earlyBirdCard">
+        <div class="promo-img">
+            <span class="promo-badge">%20 İNDİRİM</span>
+            <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop" alt="Erken Rezervasyon">
+        </div>
+        <div class="promo-content">
+            <h3>Erken Rezervasyon Fırsatı</h3>
+            <p>Kiralama tarihinizden 30 gün önce yapacağınız rezervasyonlarda %20 net indirim kazanın.</p>
+            <div class="promo-footer">
+                <span class="validity"><i class="fa-regular fa-calendar"></i> Yıl Boyunca (30 Gün Önce)</span>
+                <a asp-controller="Fleet" asp-action="Index" class="btn-promo">İncele <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="promo-card" id="weekendCard">
+        <div class="promo-img">
+            <span class="promo-badge">3 GÜN AL 2 ÖDE</span>
+            <img src="https://images.unsplash.com/photo-1519245659620-e859806a8d3b?q=80&w=1974&auto=format&fit=crop" alt="Hafta Sonu">
+        </div>
+        <div class="promo-content">
+            <h3>Hafta Sonu Keyfi</h3>
+            <p>Cuma gününden yapacağınız 3 günlük kiralamalarda sadece 2 gün ödeyin.</p>
+            <div class="promo-footer">
+                <span class="validity"><i class="fa-regular fa-clock"></i> Cuma Başlangıçlı</span>
+                <a asp-controller="Fleet" asp-action="Index" class="btn-promo">İncele <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    :root{
+        --primary-bordeaux:#800000;
+        --primary-red:#D4002A;
+        --dark-bg:#222;
+        --light-bg:#f9f9f9;
+        --text-dark:#333;
+        --success-green:#28a745;
+        --shadow:0 18px 50px rgba(0,0,0,.12);
+    }
+
+    body { background: var(--light-bg); }
+
+    /* TOAST */
+    .custom-toast{
+        position: fixed;
+        top: 25px;
+        right: 25px;
+        background: #fff;
+        color: #333;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 9999;
+        font-size: 14px;
+        font-weight: 600;
+        border-left: 5px solid var(--primary-red);
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .custom-toast.show { opacity: 1; transform: translateX(0); }
+    .custom-toast i { font-size: 18px; color: var(--primary-red); }
+
+    /* HERO */
+    .campaign-hero{
+        color: #fff;
+        padding: 70px 5%;
+        text-align: center;
+        background-image:
+          linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+          url('https://images.unsplash.com/photo-1478860409698-8707f313ee8b?q=80&w=2000&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        margin-top: 6px;
+    }
+    .hero-inner{ max-width: 1000px; margin: 0 auto; }
+    .campaign-hero h1{ font-size: 44px; margin-bottom: 10px; text-shadow: 0 5px 15px rgba(0,0,0,0.5); font-weight: 900; }
+    .campaign-hero p{ font-size: 18px; opacity: .92; }
+
+    /* CHECK SECTION */
+    .check-section{
+        background: #fff;
+        max-width: 900px;
+        margin: -30px auto 34px;
+        padding: 18px 18px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        position: relative;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        border-bottom: 4px solid var(--primary-red);
+    }
+    .check-section h3{ color: var(--text-dark); margin: 0; font-weight: 900; font-size: 16px; }
+    .date-picker{
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        min-width: 210px;
+    }
+    .btn-check{
+        background-color: var(--primary-red);
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 900;
+        transition: 0.25s;
+    }
+    .btn-check:hover{ background-color: var(--primary-bordeaux); }
+
+    /* CARDS */
+    .campaign-container{
+        max-width: 1200px;
+        margin: 0 auto 60px;
+        padding: 0 18px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+        gap: 22px;
+    }
+
+    .promo-card{
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.06);
+        transition: all 0.35s ease;
+        position: relative;
+        border: 2px solid transparent;
+        display: flex;
+        flex-direction: column;
+    }
+    .promo-card:hover{ transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0,0,0,0.10); }
+
+    .promo-card.active-campaign{
+        border-color: var(--success-green);
+        box-shadow: 0 15px 30px rgba(40, 167, 69, 0.18);
+        transform: scale(1.01);
+    }
+    .promo-card.active-campaign::after{
+        content: '\f00c';
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--success-green);
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+    }
+
+    .promo-card.dimmed{ opacity: 0.42; filter: grayscale(100%); transform: scale(0.99); }
+
+    .promo-img{ height: 210px; width: 100%; overflow: hidden; position: relative; }
+    .promo-img img{ width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .promo-card:hover .promo-img img{ transform: scale(1.1); }
+
+    .promo-badge{
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background-color: var(--primary-red);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 900;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        z-index: 10;
+    }
+
+    .promo-content{ padding: 22px; flex-grow: 1; display: flex; flex-direction: column; }
+    .promo-content h3{ color: var(--primary-bordeaux); font-size: 20px; margin-bottom: 10px; font-weight: 900; }
+    .promo-content p{ color: #666; font-size: 14px; line-height: 1.55; margin-bottom: 18px; }
+
+    .promo-footer{
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #eee;
+        padding-top: 14px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .validity{ font-size: 12px; color: #999; display: flex; align-items: center; gap: 7px; }
+
+    .btn-promo{
+        background-color: #fff;
+        color: var(--primary-bordeaux);
+        border: 2px solid var(--primary-bordeaux);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: 13px;
+        text-decoration: none;
+        transition: 0.25s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-promo:hover{ background-color: var(--primary-bordeaux); color: #fff; }
+</style>
+
+<script>
+    function showNotification(message) {
+        const existing = document.querySelector('.custom-toast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> <span>${message}</span>`;
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('show'), 10);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 500);
+        }, 3200);
+    }
+
+    function checkCampaignEligibility() {
+        const dateInput = document.getElementById('checkDate').value;
+        if (!dateInput) {
+            showNotification("Lütfen geçerli bir tarih seçiniz!");
+            return;
+        }
+
+        const selectedDate = new Date(dateInput);
+        const today = new Date();
+
+        const earlyBirdCard = document.getElementById('earlyBirdCard');
+        const weekendCard = document.getElementById('weekendCard');
+
+        earlyBirdCard.classList.remove('active-campaign', 'dimmed');
+        weekendCard.classList.remove('active-campaign', 'dimmed');
+
+        const timeDiff = selectedDate - today;
+        const diffDays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+        const dayOfWeek = selectedDate.getDay(); // 5 = Friday
+
+        let matchFound = false;
+
+        if (diffDays >= 30) { earlyBirdCard.classList.add('active-campaign'); matchFound = true; }
+        else { earlyBirdCard.classList.add('dimmed'); }
+
+        if (dayOfWeek === 5) { weekendCard.classList.add('active-campaign'); matchFound = true; }
+        else { weekendCard.classList.add('dimmed'); }
+
+        if (!matchFound) {
+            earlyBirdCard.classList.remove('dimmed');
+            weekendCard.classList.remove('dimmed');
+            showNotification("Seçilen tarih için özel bir kampanya bulunamadı, ancak standart fiyatlarımızdan yararlanabilirsiniz.");
+        }
+    }
+
+    window.addEventListener('load', () => {
+        const today = new Date().toISOString().split('T')[0];
+        const el = document.getElementById('checkDate');
+        if (el) el.setAttribute('min', today);
+    });
+</script>

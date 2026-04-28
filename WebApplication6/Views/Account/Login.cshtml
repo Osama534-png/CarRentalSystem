@@ -1,0 +1,320 @@
+﻿@model WebApplication6.Models.ViewModels.LoginVm
+
+@{
+    ViewData["Title"] = "Üye Girişi";
+    var err = ViewBag.Error as string;
+    var ok = TempData["Success"] as string;
+    var returnUrl = ViewBag.ReturnUrl as string ?? "";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üye Girişi | OMA Rent A Car</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap');
+
+        :root {
+            --primary-bordeaux: #800000;
+            --primary-red: #D4002A;
+            --light-bg: #f4f4f4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto',sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-bordeaux);
+            color: #fff;
+            padding: 0 5%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            background: #fff;
+            padding: 5px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+            .logo img {
+                height: 45px;
+            }
+
+        .back-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .login-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-container {
+            background: #fff;
+            width: 1000px;
+            height: 600px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .login-visual {
+            flex: 1;
+            background: linear-gradient(rgba(128,0,0,0.7),rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1966&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            color: #fff;
+            text-align: center;
+        }
+
+            .login-visual h2 {
+                font-size: 36px;
+                margin-bottom: 20px;
+                font-weight: 900;
+            }
+
+        .login-form-side {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+            .form-header h1 {
+                color: var(--primary-bordeaux);
+                font-size: 32px;
+                font-weight: 900;
+                margin-bottom: 10px;
+            }
+
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+            .input-group label {
+                display: block;
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 5px;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+            .input-wrapper input {
+                width: 100%;
+                padding: 15px 45px 15px 45px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 15px;
+                outline: none;
+            }
+
+            .input-wrapper i {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #999;
+                font-size: 18px;
+            }
+
+        .toggle-password {
+            left: auto;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg,var(--primary-bordeaux),var(--primary-red));
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .error {
+            background: #ffe5e8;
+            color: #8a0018;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .ok {
+            background: #e7fff0;
+            color: #0b6b2a;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .field-val {
+            margin-top: 6px;
+            font-size: 12px;
+        }
+
+        @@media (max-width: 900px) {
+            .login-container {
+                width: 100%;
+                height: auto;
+                flex-direction: column;
+                max-width: 500px;
+            }
+
+            .login-visual {
+                display: none;
+            }
+
+            .login-form-side {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="@Url.Action("Index","Home")"><img src="~/images/OMA1.png" alt="OMA Logo"></a>
+        </div>
+        <a href="@Url.Action("Index","Home")" class="back-link"><i class="fa-solid fa-arrow-left"></i> Anasayfaya Dön</a>
+    </header>
+
+    <div class="login-wrapper">
+        <div class="login-container">
+
+            <div class="login-visual">
+                <h2>Tekrar Hoşgeldiniz!</h2>
+                <p>OMA Rent A Car ayrıcalıklarıyla devam edin.</p>
+            </div>
+
+            <div class="login-form-side">
+                <div class="form-header">
+                    <h1>Üye Girişi</h1>
+                    <span>Hesabınıza erişmek için bilgilerinizi girin.</span>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(ok))
+                {
+                    <div class="ok">@ok</div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(err))
+                {
+                    <div class="error">@err</div>
+                }
+
+                <form method="post" asp-action="Login" asp-controller="Account" id="loginForm">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+                    <div asp-validation-summary="ModelOnly" class="error"></div>
+
+                    <div class="input-group">
+                        <label>E-Posta Adresi</label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input asp-for="Email" type="email" placeholder="ornek@email.com" autocomplete="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger field-val"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Şifre</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-lock"></i>
+                            <input asp-for="Sifre" type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+                            <i class="fa-regular fa-eye toggle-password" onclick="togglePassword()"></i>
+                        </div>
+                        <span asp-validation-for="Sifre" class="text-danger field-val"></span>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="btnSubmit">
+                        Giriş Yap <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            const icon = document.querySelector(".toggle-password");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        // Çift tıklama / tekrar submit engeli
+        document.getElementById("loginForm")?.addEventListener("submit", function () {
+            const btn = document.getElementById("btnSubmit");
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "Gönderiliyor...";
+            }
+        });
+    </script>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>

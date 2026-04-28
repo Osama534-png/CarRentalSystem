@@ -1,0 +1,404 @@
+﻿@model WebApplication6.Models.ViewModels.UserPanelVm
+@{
+    ViewData["Title"] = "Kullanıcı Paneli";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap');
+
+    :root {
+        --primary-bordeaux: #800000;
+        --primary-red: #D4002A;
+        --light-bg: #f8f9fa;
+        --text-dark: #333;
+        --border-color: #e0e0e0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Roboto',sans-serif;
+    }
+
+    body {
+        background: var(--light-bg);
+        color: var(--text-dark);
+    }
+
+    .profile-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 30px;
+    }
+
+    .sidebar {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        padding: 30px 20px;
+        height: fit-content;
+    }
+
+    .user-badge {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .user-avatar {
+        width: 100px;
+        height: 100px;
+        background: var(--primary-red);
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        margin: 0 auto 15px;
+        border: 4px solid #fff;
+        box-shadow: 0 5px 15px rgba(212,0,42,0.3);
+    }
+
+    .user-name-display {
+        font-size: 18px;
+        font-weight: 900;
+        color: var(--primary-bordeaux);
+    }
+
+    .user-role {
+        font-size: 12px;
+        color: #777;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-top: 5px;
+    }
+
+    .sidebar-menu {
+        list-style: none;
+    }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #555;
+            border-radius: 8px;
+            transition: .3s;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+            .sidebar-menu a:hover {
+                background: #fceaea;
+                color: var(--primary-bordeaux);
+            }
+
+            .sidebar-menu a.active {
+                background: var(--primary-bordeaux);
+                color: #fff;
+            }
+
+            .sidebar-menu a i {
+                width: 20px;
+                text-align: center;
+            }
+
+    .profile-content {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        padding: 40px;
+        min-height: 500px;
+    }
+
+    .tab-content {
+        display: none;
+        animation: fadeIn .35s ease;
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    .section-title {
+        font-size: 24px;
+        font-weight: 900;
+        color: #222;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+        .section-title i {
+            color: var(--primary-red);
+        }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 900;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background: #fafafa;
+        }
+
+            .form-group input:disabled {
+                opacity: .95;
+            }
+
+    /* ✅ Fake success */
+    .ok-toast {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        background: #e7fff0;
+        border: 1px solid #b6f2c7;
+        color: #0b6b2a;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-weight: 900;
+        margin: 12px 0 16px 0;
+    }
+
+        .ok-toast i {
+            font-size: 18px;
+        }
+
+    .profile-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
+
+    .btn-edit, .btn-save2, .btn-cancel {
+        border: none;
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 900;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-edit {
+        background: #fff;
+        border: 1px solid var(--border-color);
+    }
+
+    .btn-save2 {
+        color: #fff;
+        background: linear-gradient(45deg,var(--primary-bordeaux),var(--primary-red));
+    }
+
+    .btn-cancel {
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+    }
+
+    @@media (max-width: 980px) {
+        .profile-container {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-content {
+            padding: 24px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-actions {
+            justify-content: stretch;
+        }
+
+        .btn-edit, .btn-save2, .btn-cancel {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <aside class="sidebar">
+        <div class="user-badge">
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="user-name-display">@Model.AdSoyad</div>
+            <div class="user-role">Bireysel Üye</div>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a onclick="switchTab('profile')" id="link-profile" class="active">
+                    <i class="fa-solid fa-user-pen"></i> Profil Bilgilerim
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="profile-content">
+        <div id="tab-profile" class="tab-content active">
+            <h2 class="section-title"><i class="fa-solid fa-id-card"></i> Profil Bilgilerim</h2>
+
+            <!-- ✅ sadece frontend mesaj -->
+            <div class="ok-toast" id="okToast">
+                <i class="fa-solid fa-circle-check"></i>
+                <span id="okText">Kayıt edildi</span>
+            </div>
+
+            <!-- ✅ form yok, post yok -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Ad Soyad</label>
+                    <input value="@Model.AdSoyad" disabled class="p-edit" />
+                </div>
+
+                <div class="form-group">
+                    <label>E-Posta</label>
+                    <input value="@Model.Email" disabled />
+                </div>
+
+                <div class="form-group">
+                    <label>T.C. Kimlik No</label>
+                    <input value="@(Model.Tckn ?? "")" disabled class="p-edit" />
+                </div>
+
+                <div class="form-group">
+                    <label>Cep Telefonu</label>
+                    <input value="@(Model.Telefon ?? "")" disabled class="p-edit" />
+                </div>
+
+                <div class="form-group">
+                    <label>Doğum Tarihi</label>
+                    <input type="date"
+                           value="@(Model.DogumTarihi.HasValue ? Model.DogumTarihi.Value.ToString("yyyy-MM-dd") : "")"
+                           disabled
+                           class="p-edit" />
+                </div>
+
+                <div class="form-group">
+                    <label>Ehliyet No</label>
+                    <input value="@(Model.EhliyetNo ?? "")" disabled class="p-edit" />
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <button type="button" class="btn-edit" id="btnEdit">
+                    <i class="fa-solid fa-pen"></i> Düzenle
+                </button>
+
+                <button type="button" class="btn-save2" id="btnSave" style="display:none;">
+                    <i class="fa-solid fa-floppy-disk"></i> Kaydet
+                </button>
+
+                <button type="button" class="btn-cancel" id="btnCancel" style="display:none;">
+                    Vazgeç
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    function switchTab(t) {
+        document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+        document.getElementById('tab-' + t).classList.add('active');
+
+        document.querySelectorAll('.sidebar-menu a').forEach(x => x.classList.remove('active'));
+        document.getElementById('link-' + t).classList.add('active');
+    }
+
+    const edits = document.querySelectorAll('.p-edit');
+    const btnEdit = document.getElementById('btnEdit');
+    const btnSave = document.getElementById('btnSave');
+    const btnCancel = document.getElementById('btnCancel');
+    const okToast = document.getElementById('okToast');
+
+    // başlangıç değerleri (vazgeç için)
+    const initial = {};
+    edits.forEach((el, i) => initial[i] = el.value);
+
+    function setEditMode(on) {
+        edits.forEach(el => el.disabled = !on);
+        btnEdit.style.display = on ? 'none' : 'inline-flex';
+        btnSave.style.display = on ? 'inline-flex' : 'none';
+        btnCancel.style.display = on ? 'inline-flex' : 'none';
+    }
+
+    function showSaved() {
+        okToast.style.display = 'flex';
+        // 3 sn sonra kaybolsun istersen:
+        setTimeout(() => okToast.style.display = 'none', 3000);
+    }
+
+    btnEdit?.addEventListener('click', () => {
+        okToast.style.display = 'none';
+        setEditMode(true);
+    });
+
+    btnCancel?.addEventListener('click', () => {
+        edits.forEach((el, i) => el.value = initial[i] ?? el.value);
+        okToast.style.display = 'none';
+        setEditMode(false);
+    });
+
+    // ✅ SAHTE KAYDET (post yok)
+    btnSave?.addEventListener('click', () => {
+        // İstersen burada initial değerini güncelle (kaydetmiş gibi davranmak için):
+        edits.forEach((el, i) => initial[i] = el.value);
+
+        setEditMode(false);
+        showSaved();
+    });
+</script>
