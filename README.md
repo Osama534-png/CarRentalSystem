@@ -71,3 +71,4 @@ It demonstrates basic CRUD operations, relational database usage, and MVC archit
 ![Başarılı](./Renta_car(araba%20kiralama)/wwwroot/images/readme/success.png)
 ![Üye Giriş](./Renta_car(araba%20kiralama)/wwwroot/images/readme/uye_giris.png)
 ![Üye Ol](./Renta_car(araba%20kiralama)/wwwroot/images/readme/uye_olun.png)
+
