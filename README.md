@@ -64,11 +64,16 @@ It demonstrates basic CRUD operations, relational database usage, and MVC archit
 
 ## 📸 Screenshots
 
-![Ana Sayfa](./Renta_car(araba%20kiralama)/wwwroot/images/readme/anasayfa.jpg)
-![Araç Filosu](./Renta_car(araba%20kiralama)/wwwroot/images/readme/Arac_Filosu.png)
-![Rezervasyon](./Renta_car(araba%20kiralama)/wwwroot/images/readme/Reservation.png)
-![Rezervasyonlarım](./Renta_car(araba%20kiralama)/wwwroot/images/readme/Rezervasyonlarim.png)
-![Başarılı](./Renta_car(araba%20kiralama)/wwwroot/images/readme/success.png)
-![Üye Giriş](./Renta_car(araba%20kiralama)/wwwroot/images/readme/uye_giris.png)
-![Üye Ol](./Renta_car(araba%20kiralama)/wwwroot/images/readme/uye_olun.png)
+<img width="1345" height="635" alt="Reservation" src="https://github.com/user-attachments/assets/0fdfadb1-4309-4ccc-8edd-321ae2b6c8fb" />
+<img width="1347" height="630" alt="Araç_Filosu" src="https://github.com/user-attachments/assets/48fb0de4-30f9-4b0a-97df-7284e74d2bd5" />
+<img width="1360" height="589" alt="anasayfa" src="https://github.com/user-attachments/assets/165dacff-08c7-4cad-88cf-c1ecbf329a37" />
+<img width="1337" height="633" alt="Rezervasyonlarım" src="https://github.com/user-attachments/assets/dc75485f-87e8-4363-8c7e-dae6f193d191" />
+<img width="1087" height="548" alt="success" src="https://github.com/user-attachments/assets/1dcecc91-1242-4cf6-9750-a457ae9e48fd" />
+<img width="1351" height="640" alt="uye_olun" src="https://github.com/user-attachments/assets/eb3ed925-e280-446d-a1f9-ce9e4dbb9781" />
+<img width="1337" height="638" alt="offers" src="https://github.com/user-attachments/assets/784e189f-145e-4e99-9441-99ac2d7de89e" />
+<img width="1352" height="630" alt="uye_giris" src="https://github.com/user-attachments/assets/fc2f4269-dc23-4b76-b4ff-58ec58df16bf" />
+
+
+
+
 
